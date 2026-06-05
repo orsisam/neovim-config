@@ -18,12 +18,14 @@ return {
         "rafamadriz/friendly-snippets", -- snippets
         "nvim-treesitter/nvim-treesitter",
         "onsails/lspkind.nvim", -- vs-code pictograms
+        "roobert/tailwindcss-colorizer-cmp.nvim",
     },
     config = function()
         local cmp = require("cmp")
         -- local luasnip = require("luasnip")
         local has_luasnip, luasnip = pcall(require, 'luasnip')
         local lspkind = require("lspkind")
+        local colorizer = require("tailwindcss-colorizer-cmp")
 
         local rhs = function(keys)
             return vim.api.nvim_replece_termcodes(keys, true, true, true)
@@ -56,6 +58,7 @@ return {
             Value = ' ',
             Variable = ' ',
         }
+        -- ! Additional function that determine smarttabs and backspace logic ! --
         -- Returns the current colums number.
         local column = function()
             local _line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -90,7 +93,7 @@ return {
             local prefix = line:sub(1, col)
             return prefix:find('^%s*$')
         end
-        -- ! additional function for backspace and the smarttabs logic ! --
+        -- ! END additional function for backspace and the smarttabs logic ! --
 
         -- custom shift width
         local shift_width = function()
