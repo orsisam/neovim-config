@@ -1,10 +1,10 @@
 return {
     {
         "nvzone/showkeys",
-        lazy = true, -- auto run on startup
+        lazy = true, -- auto tun on startup
         cmd = "ShowkeysToggle",
         opts = {
-            position = "top-right",
+            position = "bottom-center",
             maxkeys = 3,
             show_count = true,
             winopts = {
@@ -17,8 +17,11 @@ return {
                 col = 0,
             },
         },
+        config = function(_, opts)
+            require("showkeys").setup(opts)
+            vim.defer_fn(function()
+                vim.cmd("ShowkeysToggle")
+            end, 100)
+        end,
     },
-    vim.keymap.set("n", "<leader>ks", "<cmd>ShowkeysToggle<CR>", {
-        desc = "Toggle Showkeys",
-    })
 }

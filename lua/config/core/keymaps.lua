@@ -3,6 +3,8 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.keymap.set("n", "<leader><leader>", function() vim.cmd("so") end)
+
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
 
@@ -18,11 +20,11 @@ vim.keymap.set("v", ">", ">gv", opts)
 
 -- Clipboard things
 -- Paste without replacing clipboard content (without loosing clipboard content)
-vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set("x", "p", [["_dP]])
 
-vim.keymap.set("v", "p", '"_dp', opts)
+-- vim.keymap.set("v", "p", '"_dp', opts)
 
--- delete without copying
+-- leader d delete wont remember as yanked/clipboard when delete pasting
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 -- Exit control mode with Ctrl-c
@@ -33,7 +35,9 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 -- because after searching the highlight won't be gone
 vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search highlight", silent = true })
 
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Need lsp to be working
+-- format built in
+-- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Need lsp to be working
+
 vim.keymap.set("n", "Q", "<nop>") -- to disable default shortcut Q on vim
 vim.keymap.set("n", "x", '"_x', opts) -- prevents deleted characters from copying to clipboard
 
@@ -72,3 +76,13 @@ vim.keymap.set("n", "<leader>fp", function()
     vim.fn.setreg("+", filePath) -- Copy the file path to the clipboard register
     print("File path copied to clipboard: " .. filePath)
 end, { desc = "Copy file path to clipboard" })
+
+--restart
+vim.keymap.set("n", "<leader>re", "<cmd>restart<cr>", {
+    desc = "Restart Neovim (:restart)",
+})
+
+vim.keymap.set("n", "<leader>re", function()
+    vim.cmd("lsp restart")
+    vim.notify("LSP restarted", vim.log.levels.INFO)
+end, { desc = "restart LSP" })

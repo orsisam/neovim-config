@@ -1,23 +1,23 @@
 return {
-    "thePrimeagen/harpoon",
-    enabled = true,
-    branch = "harpoon2",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-    },
+	"thePrimeagen/harpoon",
+	enabled = true,
+	branch = "harpoon2",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+		"nvim-telescope/telescope.nvim",
+	},
+	config = function()
+		local harpoon = require("harpoon")
+		-- local conf = require("telescope.config").values
 
-    config = function()
-        local harpoon = require("harpoon")
-        -- local conf = require("telescope.config").values
+		harpoon:setup({
+			global_settings = {
+				save_on_toggle = true,
+				save_on_change = true,
+			},
+		})
 
-        harpoon:setup({
-            global_settings = {
-                save_on_toggle = true,
-                save_on_change = true,
-            },
-        })
-
-        -- NOTE: Experimenting
+		-- NOTE: Experimenting
 		-- Telescope into Harpoon function
 		-- local function toggle_telescope(harpoon_files)
 		-- 	local file_paths = {}
@@ -36,26 +36,39 @@ return {
 		-- 		:find()
 		-- end
 
-        -- Harpoon Nav Interface
-        local keymap = vim.keymap.set
+		--Harpoon Nav Interface
+		vim.keymap.set("n", "<leader>a", function()
+			harpoon:list():add()
+		end, { desc = "Harpoon add file" })
+		vim.keymap.set("n", "<C-e>", function()
+			harpoon.ui:toggle_quick_menu(harpoon:list())
+		end)
 
-        keymap("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon add file" })
-        keymap("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon toggle list (floating window)"})
+		--Harpoon marked files
+		vim.keymap.set("n", "<C-y>", function()
+			harpoon:list():select(1)
+		end)
+		vim.keymap.set("n", "<C-i>", function()
+			harpoon:list():select(2)
+		end)
+		vim.keymap.set("n", "<C-n>", function()
+			harpoon:list():select(3)
+		end)
+		vim.keymap.set("n", "<C-s>", function()
+			harpoon:list():select(4)
+		end)
 
-        -- Harpoon marked files
-        -- Switch between active window in harpoon list. Just 1 - 3 on top list.
-        keymap("n", "<C-y>", function() harpoon:list():select(1) end, { desc = "Harpoon: switch to 1st list" })
-        keymap("n", "<C-i>", function() harpoon:list():select(2) end, { desc = "Harpoon: switch to 2nd list" })
-        keymap("n", "<C-n>", function() harpoon:list():select(3) end, { desc = "Harpoon: switch to 3th list" })
-        keymap("n", "<C-s>", function() harpoon:list():select(4) end, { desc = "Harpoon: switch to 4th list" })
+		-- Toggle previous & next buffers stored within Harpoon list
+		vim.keymap.set("n", "<C-S-P>", function()
+			harpoon:list():prev()
+		end)
+		vim.keymap.set("n", "<C-S-N>", function()
+			harpoon:list():next()
+		end)
 
-        -- Toggle previous & next buffers stored within Harpoon list
-        keymap("n", "<C-S-N>", function() harpoon:list():next() end, { desc = "Harpoon: jumpt to next buffer stored" })
-        keymap("n", "<C-S-P>", function() harpoon:list():prev() end, { desc = "Harpoon: jump to previous buffers stored" })
-
-        -- Telescope inside Harpoon Window
+		-- Telescope inside Harpoon Window
 		-- vim.keymap.set("n", "<C-f>", function()
 		-- 	toggle_telescope(harpoon:list())
 		-- end)
-    end,
+	end,
 }

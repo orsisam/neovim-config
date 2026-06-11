@@ -1,5 +1,8 @@
+-- This is where plugins installed because no need more 
+-- configurations
+
 return {
-    "nvim-lua/plenary.nvim", --  multiple plugins need
+    "nvim-lua/plenary.nvim", -- multiple plugins need
     "christoomey/vim-tmux-navigator", -- tmux & split window nav
     -- fixes undefined globals
     {
@@ -12,7 +15,7 @@ return {
                     path = "${3rd}/plenary.nvim/lua",
                     words = { "plenary" }
                 },
-                { path = "LazyVim" },
+                { path = "Lazyvim" },
             },
         },
     },
