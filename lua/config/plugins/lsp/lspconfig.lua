@@ -109,6 +109,39 @@ return {
             },
         })
 
+        -- Intelphense (php 8.5 & Laravel 13)
+        vim.lsp.config("intelphense", {
+            filetypes = { "php", "blade" },
+            settings = {
+                intelephense = {
+                    stubs = {
+                        "bcmath", "bz2", "calendar", "Core", "curl", "date", "dba", "dom", "enchant",
+                        "fileinfo", "filter", "ftp", "gd", "gettext", "hash", "iconv", "imap", "intl",
+                        "json", "ldap", "libxml", "mbstring", "meta", "mysqli", "oci8", "odbc", "openssl",
+                        "pcntl", "pcre", "PDO", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "pgsql", "Phar",
+                        "posix", "pspell", "readline", "Reflection", "session", "shmop", "SimpleXML",
+                        "snmp", "soap", "sockets", "sodium", "SPL", "standard", "superglobals", "sysvmsg",
+                        "sysvsem", "sysvshm", "tidy", "tokenizer", "xml", "xmlreader",  "xmlrpc", "xmlwriter",
+                        "xsl", "zip", "zlib",
+                        "laravel", "phpunit", -- Membaca class Facade milik Laravel 13 dengan baik
+                    },
+                    files = {
+                        maxSize = 5000000,
+                    }
+                }
+            }
+        })
+
+        -- Volar (Vue 3)
+        vim.lsp.config("volar", {
+            filetypes = { "vue" },
+            init_options = {
+                vue = {
+                    hybridMode = true, -- Mengaktifkan Hybrid Mode berperforma tinggi dengan ts_ls
+                },
+            },
+        })
+
         -- emmet_language_server
         vim.lsp.config("emmet_language_server", {
             filetypes = {
@@ -118,6 +151,9 @@ return {
                 "javascriptreact",
                 "less",
                 "typescriptreact",
+                -- Menambahkan blade & vue
+                "blade",
+                "vue",
             },
             init_options = {
                 includeLanguages = {},
@@ -143,6 +179,9 @@ return {
                 "scss",
                 "less",
                 "svelte",
+                -- tambahan untuk blade & vue
+                "blade",
+                "vue",
             },
         })
 
@@ -153,9 +192,17 @@ return {
                 "javascriptreact",
                 "typescript",
                 "typescriptreact",
+                "vue", -- Diperlukan untuk koordinasi tipe data komponen Vue 3
             },
             single_file_support = true,
             init_options = {
+                plugins = {
+                    {
+                        name = "@vue/typescript-plugin",
+                        location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+                        languages = { "vue" },
+                    },
+                },
                 preferences = {
                     includeCompletionsForModuleExports = true,
                     includeCompletionsForImportStatements = true,
@@ -233,6 +280,7 @@ return {
                 "svelte",
                 "vue",
                 "astro",
+                "blade",
             },
             init_options = {
                 userLanguages = {
@@ -266,6 +314,8 @@ return {
             "astro",
             "tailwindcss",
             "marksman",
+            "intelephense", -- Aktifkan PHP
+            "volar", -- Aktifkan Vue
         })
     end,
 }

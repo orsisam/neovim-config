@@ -38,6 +38,8 @@ return {
                 "emmet_ls",
                 "emmet_language_server",
                 "marksman",
+                -- Stack Laravel Development
+                "intelephense",
             },
         })
 
@@ -50,6 +52,9 @@ return {
                 "pylint",
                 "clangd",
                 "denols",
+                -- Laravel Stack
+                "pint",                 -- Laravel Pint Formatter bawaan Laravel 13
+                "vue-language-server",  -- Package global NPM pendukung Hybrid Mode pada ts_ls
             },
         })
     end,
