@@ -3,7 +3,9 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.keymap.set("n", "<leader><leader>", function() vim.cmd("so") end)
+vim.keymap.set("n", "<leader><leader>", function()
+	vim.cmd("so")
+end)
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
@@ -36,53 +38,57 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search highlight", silent = true })
 
 -- format built in
--- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Need lsp to be working
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format) -- Need lsp to be working
 
 vim.keymap.set("n", "Q", "<nop>") -- to disable default shortcut Q on vim
 vim.keymap.set("n", "x", '"_x', opts) -- prevents deleted characters from copying to clipboard
 
 -- Replace the word cursor is on globally
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 
-    { desc = "Replace word cursor is on globally" })
+vim.keymap.set(
+	"n",
+	"<leader>s",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "Replace word cursor is on globally" }
+)
 
 -- Execute shell command from in here making file executable
 vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true, desc = "make file executable" })
 
 -- Highlight yank
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-    callback = function()
-        vim.highlight.on_yank()
-    end,
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
 
 -- tab stuff
-vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>")        -- open new tab
-vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>")      -- close current tab
-vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>")          -- go to next
-vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>")          -- go to pre
-vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>")      -- open current tab in new tab
+vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>") -- open new tab
+vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>") -- close current tab
+vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>") -- go to next
+vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>") -- go to pre
+vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>") -- open current tab in new tab
 
 -- split
-vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })   -- split window vertically
+vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
 vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })    -- make split window equal width & height
+vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split window equal width & height
 vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
 
 -- Copy filepath to the clipboard
 vim.keymap.set("n", "<leader>fp", function()
-    local filePath = vim.fn.expand("%:~")   -- Gets the file path relative to the home directory
-    vim.fn.setreg("+", filePath) -- Copy the file path to the clipboard register
-    print("File path copied to clipboard: " .. filePath)
+	local filePath = vim.fn.expand("%:~") -- Gets the file path relative to the home directory
+	vim.fn.setreg("+", filePath) -- Copy the file path to the clipboard register
+	print("File path copied to clipboard: " .. filePath)
 end, { desc = "Copy file path to clipboard" })
 
 --restart
 vim.keymap.set("n", "<leader>re", "<cmd>restart<cr>", {
-    desc = "Restart Neovim (:restart)",
+	desc = "Restart Neovim (:restart)",
 })
 
-vim.keymap.set("n", "<leader>re", function()
-    vim.cmd("lsp restart")
-    vim.notify("LSP restarted", vim.log.levels.INFO)
+vim.keymap.set("n", "<leader>rl", function()
+	vim.cmd("lsp restart")
+	vim.notify("LSP restarted", vim.log.levels.INFO)
 end, { desc = "restart LSP" })
