@@ -40,6 +40,7 @@ return {
 				markdown = { "mdformat", "markdownlint-cli2", "markdown-toc" },
 				php = { "pint" },
 				dart = { "dart_format" },
+				blade = { "blade-fomatter" },
 				-- python = { "black" },
 			},
 			format_on_save = function(bufnr)

@@ -24,6 +24,54 @@ return {
 				enabled = true,
 				exclude = { "latex" },
 			},
+			-- LAZYGIT
+			lazygit = {
+				-- automatically configure lazygit to use current colorscheme
+				-- and integrate edit with the current neovim instance
+				configure = true,
+				-- extra configuration for lazygit that will be merged with the default
+				-- snacks does NOT have a full yaml parser, so if you nedd "test" to appear with the quaotes
+				-- you need to double quote it: `"\"test\""`
+				config = {
+					os = { editPreset = "nvim-remote" },
+					gui = {
+						-- set to an empty string "" to disable icons
+						showCommitGraph = "always",
+						showIcons = true,
+						nerdFontsVersion = "3",
+					},
+				},
+				theme_path = vim.fs.normalize(vim.fn.stdpath("cache") .. "/lazygit-theme.yml"),
+				-- Theme for lazygit
+				theme = {
+					[241] = { fg = "Special" },
+					activeBorderColor = { fg = "MatchParent", bold = true },
+					cherryPickedCommitBgColor = { fg = "Identifier" },
+					cherryPickedCommitFgColor = { fg = "Function" },
+					defaultFgColor = { fg = "Normal" },
+					inactiveBorderColor = { fg = "FloatBorder" },
+					optionsTextColor = { fg = "Function" },
+					searchingActiveBorderColor = { fg = "MatchParent", bold = true },
+					selectedLineBgColor = { bg = "Visual" }, -- set to `default` to have no background color
+					unstagedChangesColor = { fg = "DiagnosticError" },
+				},
+				win = {
+					style = "lazygit",
+				},
+			},
+
+			-- Explorer Configuration
+			explorer = {
+				enabled = true,
+				layout = {
+					cycle = false,
+				},
+				quickfile = {
+					enabled = true,
+					exclude = { "latex" },
+				},
+			},
+
 			-- PICKER
 			-- HACK: read picker docs @ https://github.com/folke/snacks.nvim/blob/main/docs/picker.md
 			picker = {
@@ -79,7 +127,12 @@ return {
 							border = "none",
 							{
 								box = "vertical",
-								{ win = "list", title = " Results ", title_pos = "center", border = "rounded" },
+								{
+									win = "list",
+									title = " Results ",
+									title_pos = "center",
+									border = "rounded",
+								},
 								{
 									win = "input",
 									height = 1,
@@ -142,8 +195,8 @@ return {
 					"public",
 					"media",
 					"attachments",
-					"Archives/All-Vault-Images/",
-					"~/Library",
+					-- "Archives/All-Vault-Images/",
+					-- "~/Library",
 					"~/Downloads",
 				},
 			},
@@ -153,6 +206,14 @@ return {
 					{ section = "header" },
 					{ section = "keys", gap = 1, padding = 1 },
 					{ section = "startup" },
+					{
+						section = "terminal",
+						cmd = "ascii-image-converter /home/orsisam/Pictures/tux.jpg -C -c",
+						random = 10,
+						pane = 2,
+						indent = 4,
+						height = 30,
+					},
 					-- {
 					--     section = "terminal",
 					--     cmd = "ascii-image-converter ~/Desktop/Others/profile.png -C -c",
@@ -179,6 +240,13 @@ return {
 					require("snacks").lazygit.log()
 				end,
 				desc = "Lazygit Logs",
+			},
+			{
+				"<leader>es",
+				function()
+					require("snacks").explorer()
+				end,
+				desc = "Open snacks explorer",
 			},
 			{
 				"<leader>rN",
@@ -211,6 +279,27 @@ return {
 				end,
 				desc = "Search Keymaps (Snacks Picker)",
 			},
+			{
+				"<leader>pf",
+				function()
+					require("snacks").picker.files()
+				end,
+				desc = "Find Files (Snacks Picker)",
+			},
+			{
+				"<leader>pc",
+				function()
+					require("snacks").picker.files({ cwd = vim.fn.stdpath("config") })
+				end,
+				desc = "Find Config Files (Snacks Picker)",
+			},
+			{
+				"<leader>ps",
+				function()
+					require("snacks").picker.grep()
+				end,
+				desc = "Grep word",
+			},
 
 			-- Git Stuff
 			{
@@ -222,13 +311,13 @@ return {
 			},
 
 			-- Other Utils
-			{
-				"<leader>th",
-				function()
-					require("snacks").picker.colorschemes({ layout = "ivy" })
-				end,
-				desc = "Pick Color Schemes",
-			},
+			-- {
+			-- 	"<leader>th",
+			-- 	function()
+			-- 		require("snacks").picker.colorschemes({ layout = "ivy" })
+			-- 	end,
+			-- 	desc = "Pick Color Schemes",
+			-- },
 			{
 				"<leader>vh",
 				function()
@@ -249,14 +338,16 @@ return {
 				function()
 					require("snacks").picker.todo_comments()
 				end,
-				desc = "All",
+				desc = "List all todo comments",
 			},
 			{
 				"<leader>pT",
 				function()
-					require("snacks").picker.todo_comments({ keywords = { "TODO", "FORGETNOT", "FIXME" } })
+					require("snacks").picker.todo_comments({
+						keywords = { "TODO", "FORGETNOT", "FIXME", "UNFINISHED", "INPROGRESS" },
+					})
 				end,
-				desc = "mains",
+				desc = "Searching Special comments tag 'TODO', 'FIX', 'FIXME', etc",
 			},
 		},
 	},
