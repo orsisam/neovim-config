@@ -24,6 +24,7 @@ return {
 							lsp = true,
 							update_names = true,
 						},
+						names = false,
 					},
 				},
 				filetypes = {
