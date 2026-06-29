@@ -186,9 +186,17 @@ return {
 						"zlib",
 						"laravel",
 						"phpunit", -- Membaca class Facade milik Laravel 13 dengan baik
+						"wordpress",
 					},
 					files = {
-						maxSize = 5000000,
+						maxSize = 8000000,
+					},
+					completion = {
+						fullyQualifyGlobalConstantsAndFunctions = false,
+						includeCompletionsForImportStatements = true,
+					},
+					diagnostics = {
+						enable = true,
 					},
 				},
 			},
