@@ -93,10 +93,17 @@ return {
 				end, opts)
 
 				-- Keypaps to reindex workspace project laravel agar mengenali file baru
-				opts.desc = "Intelephense Re-index Workspace"
+				opts.desc = "Intelphense Re-index Workspace"
 				vim.keymap.set("n", "<leader>li", function()
-					vim.lsp.buf.execute_command({ command = "intelephense.index.workspace" })
-					print("LSP: Intelephense indexing restarted...")
+					vim.lsp.buf_request(0, "workspace/executeCommand", {
+						command = "intelphense.index.workspace",
+					}, function(err, result, ctx, config)
+						if err then
+							vim.notify("LSP Error: " .. err.message, vim.log.levels.ERROR)
+						else
+							vim.notify("LSP: Intelphense indexing restarted...", vim.log.levels.INFO)
+						end
+					end)
 				end, opts)
 			end,
 		})
