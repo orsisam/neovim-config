@@ -23,6 +23,42 @@ return {
 				opts.desc = "Show LSP definitions"
 				vim.keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
 
+				-- Act like "gd" keymap but it opens on other tab
+				opts.desc = "Show LSP definitions on new nvim tab"
+				vim.keymap.set("n", "<leader>gdt", function()
+					local params = vim.lsp.util.make_position_params(0, "utf-8")
+					local clients = vim.lsp.get_clients({ bufnr = 0 })
+					if #clients == 0 then
+						vim.notify("No LSP client attached", vim.log.levels.WARN)
+						return
+					end
+
+					clients[1]:request("textDocument/definition", params, function(err, result, ctx)
+						if err then
+							vim.notify("Error: " .. err.message, vim.log.levels.ERROR)
+							return
+						end
+						if not result or #result == 0 then
+							vim.notify("No definition found", vim.log.levels.INFO)
+							return
+						end
+
+						local location = result[1]
+						local uri = location.uri or location.targetUri
+						local range = location.range or location.targewtRange
+
+						if uri then
+							local filepath = vim.uri_to_fname(uri)
+							vim.cmd("tabedit " .. vim.fn.fnameescape(filepath))
+							if range then
+								local line = range.start.line + 1
+								local col = range.start.character + 1
+								vim.api.nvim_win_set_cursor(0, { line, col })
+							end
+						end
+					end, 0)
+				end, opts)
+
 				opts.desc = "Show LSP implementations"
 				vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
 
