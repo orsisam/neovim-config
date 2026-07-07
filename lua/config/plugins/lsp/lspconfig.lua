@@ -91,6 +91,13 @@ return {
 				vim.keymap.set("i", "<C-h>", function()
 					vim.lsp.buf.signature_help()
 				end, opts)
+
+				-- Keypaps to reindex workspace project laravel agar mengenali file baru
+				opts.desc = "Intelephense Re-index Workspace"
+				vim.keymap.set("n", "<leader>li", function()
+					vim.lsp.buf.execute_command({ command = "intelephense.index.workspace" })
+					print("LSP: Intelephense indexing restarted...")
+				end, opts)
 			end,
 		})
 
