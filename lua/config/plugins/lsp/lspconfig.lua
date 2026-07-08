@@ -59,6 +59,30 @@ return {
 					end, 0)
 				end, opts)
 
+				-- Keypaps to reindex workspace project laravel agar mengenali file baru
+				opts.desc = "Intelphense Re-index Workspace"
+				vim.keymap.set("n", "<leader>li", function()
+					-- Mencari client bernama "intelphense" yang sedang aktif di buffer saat ini
+					local php_clients = vim.lsp.get_clients({ name = "intelphense", bufnr = 0 })
+
+					if #php_clients == 0 then
+						vim.notify("LSP: Intelphense tidak aktif di buffer ini", vim.log.levels.WARN)
+						return
+					end
+
+					-- Kirim request ekslusif hanya ke intelphense client pertama yang ditemukan
+					local intelphense_client = php_clients[1]
+					intelphense_client.requests("workspace/executeCommand", {
+						command = "intelphense.index.workspace",
+					}, function(err, result, ctx, config)
+						if err then
+							vim.notify("LSP Index Error: " .. err.message, vim.log.levels.ERROR)
+						else
+							vim.notify("LSP: Intelphense indexing restarted successfully!", vim.log.levels.INFO)
+						end
+					end, 0) -- Angka 0 di sini merujuk pada current buffer id
+				end, opts)
+
 				opts.desc = "Show LSP implementations"
 				vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
 
@@ -90,20 +114,6 @@ return {
 				opts.desc = "Show signature help"
 				vim.keymap.set("i", "<C-h>", function()
 					vim.lsp.buf.signature_help()
-				end, opts)
-
-				-- Keypaps to reindex workspace project laravel agar mengenali file baru
-				opts.desc = "Intelphense Re-index Workspace"
-				vim.keymap.set("n", "<leader>li", function()
-					vim.lsp.buf_request(0, "workspace/executeCommand", {
-						command = "intelphense.index.workspace",
-					}, function(err, result, ctx, config)
-						if err then
-							vim.notify("LSP Error: " .. err.message, vim.log.levels.ERROR)
-						else
-							vim.notify("LSP: Intelphense indexing restarted...", vim.log.levels.INFO)
-						end
-					end)
 				end, opts)
 			end,
 		})
@@ -170,6 +180,7 @@ return {
 		-- Intelphense (php 8.5 & Laravel 13)
 		vim.lsp.config("intelphense", {
 			filetypes = { "php", "blade" },
+			root_markers = { "composer.json", ".git", "package.json" },
 			settings = {
 				intelephense = {
 					stubs = {
